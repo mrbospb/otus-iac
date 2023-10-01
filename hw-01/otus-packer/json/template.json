@@ -1,0 +1,41 @@
+{
+  "variables": {
+    "folder_id": "{{env `YC_FOLDER`}}"
+  },
+
+  "builders": [
+    {
+      "type": "yandex",
+
+      "folder_id": "{{user `folder_id`}}",
+      "platform_id": "standard-v2",
+
+      "image_name": "ubuntu-2004-lts-nginx-{{isotime | clean_resource_name}}",
+      "image_family": "ubuntu-web-server",
+      "image_description": "my ubuntu-nginx-2.0",
+
+      "source_image_family": "ubuntu-2004-lts",
+
+      "use_ipv4_nat": true,
+      "subnet_id": "e9b62c662gs4s2fkcqus",
+      "disk_type": "network-ssd",
+      "ssh_username": "ubuntu",
+
+      "service_account_key_file": "~/otus/otus-iac-hw/hw-01/otus-packer/key.json"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "echo 'updating apt cache'",
+        "sudo apt update -y",
+        "sudo apt install -y nginx nano git",
+        "sudo systemctl enable nginx",
+        "curl localhost"
+      ]
+    }
+  ]
+
+}
